@@ -1,0 +1,73 @@
+/**************************************
+ * *Description: Class Medusa implementation file.
+ * *           : Inherits from Class Character.
+ ***********************************************/
+
+#include "Character.hpp"
+#include"Medusa.hpp"
+
+/***************************
+ * *Description: Constructor
+ ****************************/
+Medusa::Medusa()
+{
+   name = "Medusa";
+   armor = 0;
+   strength = 12; 
+}
+
+/**************************
+ * *Description: Destructor
+ *************************/
+Medusa::~Medusa() {}
+
+/**************************
+ * *Function name: attack
+ * *Description: rolls die for vampire attack points and returns opponents damage
+ ****************************/
+void Medusa::attack(Character *foe)
+{
+   int attack1 = rand () % 6 + 1;
+   int attack2 = rand () % 6 + 1;
+   int attack = attack1 + attack2;//Add both die
+   bool glare = false;
+   std::cout << "Medusa " << "rolled a " << attack1 << " and a  " << attack2 << " against " << foe->getName() << " for a total of " << attack << " attack points!" << std::endl;
+   if(attack==12)//If Medusa rolls a 12, pass glare is true to defender
+   {
+      std::cout << "Medusa uses her special ability, glare!" << std::endl;
+      glare = true;
+   }
+   foe->defense(attack, name, glare);
+}
+
+/**************************
+ * *Function name: defense
+ * *Description: determines vampire damage
+ **************************/
+void Medusa::defense(int attack, std::string foe_name, bool glare)
+{
+   std::cout << "Medusa has " << armor << " armor and " << strength << " strength points." << std::endl;
+   int defense1 = rand () % 6 + 1;
+   int defense2 = rand () % 6 + 1;
+   int defense = defense1 + defense2;//Add both die
+   std::cout << "Medusa rolled a " << defense1 << " and a " << defense2 << " for a total of " << defense << " for defense!" << std::endl;
+   int damage = attack - defense - armor;
+   if(damage <=0)
+   {   
+      std::cout << foe_name << "'s attack was ineffective! Medusa does not take any damage." << std::endl;
+   }   
+   else
+   {   
+      strength -= damage;
+      if(strength <=0)
+      {   
+	 strength = 0;
+      }   
+      std::cout << "Medusa takes " << damage << " damage points!" << std::endl;
+      std::cout << "Medusa strength has been reduced to " << strength << " points!" << std::endl;
+      if(strength==0)
+      {   
+	 std::cout << "Medusa dies!" << foe_name << " won!" << std::endl;
+      }   
+   }   
+}
